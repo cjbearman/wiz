@@ -158,3 +158,8 @@ for _, result := range results {
 ```
 
 Device groups have corresponding (asynchronous) methods for all the operations listed above. For operations that return useful data (such as GetPilot), the result object will include that data.
+
+# Full API documentation
+
+Full API documentation available on pkg.go.dev:
+https://pkg.go.dev/github.com/cjbearman/wiz/pkg/wiz
