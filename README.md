@@ -159,6 +159,88 @@ for _, result := range results {
 
 Device groups have corresponding (asynchronous) methods for all the operations listed above. For operations that return useful data (such as GetPilot), the result object will include that data.
 
+## Color strings
+Color strings provide a convenient way to represent multiple settings for SetPilot operations in a simple string.
+
+Several formats are supported:
+* #RRGGBB - RGB values, i.e. #FF0000 for red
+* #CCWW - CW values (cool and warm white LEDs), i.e. #FFFF (both on full power)
+* #RRGGBBCCWW - For when you want to turn on all LEDs, RGB and cool/warm white LEDs simultaneously
+* W3500 - For setting a color temp, such as 3500 in this example
+* off - Turning the bulb off
+
+Additionally, the following wiz defined scene names can be used for a color string:
+* Ocean
+* Romance
+* Sunset
+* Party
+* Fireplace
+* Cozy
+* Forest
+* PastelColors
+* WakeUp
+* Bedtime
+* WarmWhite
+* Daylight
+* CoolWhite
+* NightLight
+* Focus
+* Relax
+* TrueColors
+* TVTime
+* PlantGrowth
+* Spring
+* Summer
+* Fall
+* DeepDive
+* Jungle
+* Mojito
+* Club
+* Christmas
+* Halloween
+* Candlelight
+* GoldenWhite
+* Pulse
+* Steampunk
+* Diwali
+* LightAlarm
+* Rhythm
+
+Any of the above values can be postfixed with "/xxx" (i.e. /100) to set brightness percentage. Wiz scenes can further be postfixes with /xxx (xxx = speed).
+
+Examples:
+* #FF0000 - Red
+* #00FF002222 - Green with both white LEDs on at a lower level
+* #00FFFF/50 - Purple, 50% power
+* Diwali/50/150 - Diwali scene, 50% power, 150 speed
+* W3500 - White, color temp 3500
+* #00FF/100 - Warm white at full power
+
+
+Color strings can be used in SetPilot:
+```go
+dev := wiz.MustDevice("192.168.20.163")
+dev.SetPilot(wiz.MustSettingsFromString("#ff0000/100"))
+```
+
+Color strings can be manufactured from a GetPilot result:
+```go
+dev := wiz.MustDevice("192.168.20.163")
+pilot, err := dev.GetPilot()
+if err != nil {
+	panic(err)
+}
+
+cstr, err := wiz.ColorStringFromPilot(pilot)
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(cstr)
+// Outputs: #ff0000/100
+```
+Note that ColorStringFromPilot will not return "off", since a light may be off and also have a configured setting, it will return the configured setting.
+
 # Full API documentation
 
 Full API documentation available on pkg.go.dev:
